@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 #Define System of ODEs
 def odesystem (y, x):
-    dydx = (x*x*y*y + y)/(2*x*x*x*y - x)
+    dydx = x*(y**3)-x*y
     return dydx
 
 #solve ODE
