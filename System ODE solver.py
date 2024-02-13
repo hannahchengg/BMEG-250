@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 def odesystem (z, t):
     x = z[0]
     y = z[1]
-    dxdt = y
-    dydt = -2*x-3*y
+    dxdt = 4*x - 3*y
+    dydt = 8*x - 6*y
     dzdt = [dxdt, dydt]
     return dzdt
 
