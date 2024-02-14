@@ -4,18 +4,22 @@ from scipy.integrate import odeint #Using the simple ODE solver
 import matplotlib.pyplot as plt
 
 #parameter values
+a = 5
+b = 2
+c = -17
+d = -5
 
 #Define System of ODEs
 def odesystem (z, t):
     x = z[0]
     y = z[1]
-    dxdt = 4*x - 3*y
-    dydt = 8*x - 6*y
+    dxdt = a*x + b*y
+    dydt = c*x + d*y
     dzdt = [dxdt, dydt]
     return dzdt
 
 #solve ODE
-t = np.linspace(0, 20, 200)
+t = np.linspace(0, 2.5, 200)
 x0 = 1 #initial x value
 y0 = 1 #initial y value
 z0 = [x0, y0]
@@ -24,6 +28,15 @@ z = odeint(odesystem, z0, t)
 x = z[:, 0]
 y = z[:, 1]
 
+#calculate eigenvalues
+arr = [[a, b], [c, d]]
+eigen = np.linalg.eig(arr)
+print(eigen[0])
+
 #plot results
-plt.plot(x, y)
+plt.plot(x,y)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Question 2c")
 plt.show()
+

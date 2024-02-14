@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 #Define System of ODEs
 def odesystem (y, x):
-    dydx = -(x**2*y**2+y)/(2*x**3*y - x)
+    dydx = x**3*y - x*y
     return dydx
 
 #solve ODE
@@ -19,4 +19,7 @@ y = odeint(odesystem, y0, x)
 
 #plot results
 plt.plot(x,y)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Question 1b")
 plt.show()
