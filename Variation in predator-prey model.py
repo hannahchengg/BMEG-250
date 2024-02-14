@@ -33,7 +33,24 @@ z = odeint(predprey, z0, t)
 x = z[:,0]
 y = z[:,1]
 
+#calculate partial derivatives for Jacobian matrix and eigenvalues
+def eigencalc(e):
+    x = e[0]
+    y = e[1]
+    f1dx = 1 - (2*x)/5 -y
+    f1dy = -x
+    f2dx = y
+    f2dy = x-1
 
+    j = [[f1dx, f1dy], [f2dx, f2dy]]
+    eigen =  np.linalg.eig(j)
+    return eigen[0]
+
+e1 = [0, 0]
+e2 = [1, 1]
+
+print("e1:", eigencalc(e1))
+print("e2:", eigencalc(e2))
 
 #Plotting the solution
 
