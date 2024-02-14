@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 #parameter values
 
+
 #Define System of ODEs
 def odesystem (z, t):
     x = z[0]
