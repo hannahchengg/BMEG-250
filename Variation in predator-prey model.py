@@ -33,6 +33,8 @@ z = odeint(predprey, z0, t)
 x = z[:,0]
 y = z[:,1]
 
+
+
 #Plotting the solution
 
 plt.subplot(2, 1, 1)

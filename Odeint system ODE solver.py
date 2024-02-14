@@ -4,10 +4,10 @@ from scipy.integrate import odeint #Using the simple ODE solver
 import matplotlib.pyplot as plt
 
 #parameter values
-a = 5
-b = 2
-c = -17
-d = -5
+a = 4
+b = -3
+c = 8
+d = -6
 
 
 #Define System of ODEs
@@ -38,6 +38,6 @@ print(eigen[0])
 plt.plot(x,y)
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Question 2c")
+plt.title("Question 2d")
 plt.show()
 
