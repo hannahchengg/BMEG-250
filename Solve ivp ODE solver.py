@@ -33,9 +33,9 @@ def odesystem (t, z):
 
 #solve ODE
 t = np.array([0, 200])
-z0 = [5, 5, 5, 5]
+z0 = [0.1, 0.4, 0.2, 0.5]
 
-sol = solve_ivp(odesystem, t, z0)
+sol = solve_ivp(odesystem, t, z0, method='RK23',dense_output=True)
 
 for i in range(sol.y.shape[0]):
     plt.plot(sol.t, sol.y[i], label=f'$X_{i}(t)$')
