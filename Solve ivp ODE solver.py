@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 #Define System of ODEs
 def odesystem (t, z):
     
+    # a is a matrix of values with first col being r values
     a = [[1, 1, 1.09, 1.52, 0], 
          [0.72, 0, 1, 0.44, 1.36], 
          [1.53, 2.33, 0, 1, 0.47], 
