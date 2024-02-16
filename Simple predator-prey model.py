@@ -4,10 +4,7 @@ from scipy.integrate import odeint #Using the simple ODE solver
 import matplotlib.pyplot as plt
 
 #Parameter values
-a = 2
-b = 2
-c = 1
-d = 1
+
 
 #Defining the system of ODEs
 
@@ -15,10 +12,11 @@ def predprey(z,t):
     #z is an array of [x,y] 
     #Iindexing in python stats at 0
     # x = z[0], y = z[1]
-    dxdt = a*z[0] - b*z[0]*z[1]
-    dydt = c*z[0]*z[1] - d*z[1] 
-    dzdt = [dxdt, dydt]
-    return dzdt
+    
+
+    dx = []
+
+    return dx
 
 #Solving the system of ODEs
 
