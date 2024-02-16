@@ -6,25 +6,23 @@ import matplotlib.pyplot as plt
 #parameter values
 a = 1
 b = 1
-c = 1
-d= 1
+c = -1
+d= -1
 
 
 #Define System of ODEs
 def odesystem (z, t):
     x = z[0]
     y = z[1]
-    u = (2.5 * y)/(1.5 + y)
-    Ys = 0.4
-    dxdt = u*x
-    dydt = -Ys*x
+    dxdt = a*x + b*y
+    dydt = c*x + d*y
     dzdt = [dxdt, dydt]
     return dzdt
 
 #solve ODE
-t = np.linspace(0, 1, 100)
-x0 = 3 #initial x value
-y0 = 10 #initial y value
+t = np.linspace(0, 2, 200)
+x0 = 1 #initial x value
+y0 = 1 #initial y value
 z0 = [x0, y0]
 
 z = odeint(odesystem, z0, t)
@@ -35,11 +33,10 @@ y = z[:, 1]
 print("x:", z[30, 0]) #time x number of increments from t value
 print("y:", z[30, 1])
 
-
 #calculate eigenvalues
 arr = [[a, b], [c, d]] 
-eigen = np.linalg.eig(arr)
-print("eigenvalues:", eigen[0])
+eigen = np.linalg.eigvals(arr)
+print("eigenvalues:", eigen)
 
 #Plot Results
 plt.subplot(2, 1, 1)
