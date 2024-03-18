@@ -111,3 +111,7 @@ plt.title('Non-competitive inhibition')
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+# The inhibitor is non-competitive according to the graph
+#vmax estimated by non-linear regression is 1.59 M/min
+# Ki estimated by non-linear regression is 1.64 M
