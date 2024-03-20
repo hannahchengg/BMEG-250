@@ -2,12 +2,12 @@
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
+from scipy.optimize import least_squares 
 import matplotlib.pyplot as plt
 from cycler import cycler
 
-df1 = pd.read_excel('C:/Users/hc200/Downloads/BMEG 250/Assignment 3/Assignment 3.xlsx', 'Problem 1')
-df2 = pd.read_excel('C:/Users/hc200/Downloads/BMEG 250/Assignment 3/Assignment 3.xlsx', 'Problem 2')
-df3 = pd.read_excel('C:/Users/hc200/Downloads/BMEG 250/Assignment 3/Assignment 3.xlsx', 'Problem 3')
+
+df1 = pd.read_excel('Assignment 3/Assignment 3.xlsx', 'Problem 1')
 
 #Problem 1
 
@@ -22,28 +22,23 @@ Cs = df1["CS"].values
 Ci = 1
 MMconst = 9.2 #g/L
 
+print(df1)
 
-v_truncated = v[v > 0]
-conc_truncated = Cs[Cs > 0]
-
-def michaelis1(substrate,params):
+#estimate the velocity using michaelis
+def michaelis(substrate,params):
     #params = [vmax, Km]
     velocity = (params[0]*substrate)/(params[1]+substrate)
+    print(velocity)
     return velocity
 
-
-#Now let's define the residual
-
+#calculate the residual
 def residual(params):
-    return michaelis1(Cs,params) - v
+    #velocity from michaelis - actual velocity
+    return michaelis(Cs,params) - v
 
-#Run the regression function
-
-from scipy.optimize import least_squares 
-
+#find the best fit from residual
 fit_nl = least_squares(residual, [1,5]) #Fitting, [1,5] is the initial guess for params
-
-velfit_nl = michaelis1(Cs, fit_nl.x) #Data for trendline, parameters stored in the x-array of fit2
+velfit_nl = michaelis(Cs, fit_nl.x) #Data for trendline, parameters stored in the x-array of fit2
 
 #Plot
 plt.subplot(3,1,1)
@@ -60,16 +55,11 @@ print('')
 print('vmax estimated by non-linear regression is', round(vmax,2), 'M/min')
 Ki = Ci/(Km/MMconst-1)
 print('Ki estimated by non-linear regression is', round(Ki,2), 'M')
-
-
-
-def michaelis(S,t):
-    dSdt = -(vmax*S)/(Km + S)
-    return dSdt
+print(Km)
 
 S0 = Cs[0]
-t = np.linspace(0,150,7)
-S = odeint(michaelis, S0, t)
+t = np.linspace(0,700)
+S = Cs
 
 #Competitive inhibition
 def competitive(S,t):
@@ -78,7 +68,6 @@ def competitive(S,t):
 
 #Competitive inhibition
 plt.subplot(3,1,2)
-# for i in range(1, 5):
 Icomp = 1
 Scomp = odeint(competitive, S0, t)
 vcomp = (vmax*Scomp)/(MMconst*(1 + Icomp/Ki) + Scomp)
@@ -94,11 +83,11 @@ plt.legend()
 #Non-competitive inhibition
 def noncompetitive(S,t):
     dSdt = -(vmax*S)/((MMconst + S)*(1 + Inc/Ki))
+    print("dsdt", dSdt)
     return dSdt
 
 #Non-competitive inhibition
 plt.subplot(3,1,3)
-# for i in range (1,5):
 Inc =  1
 Snc = odeint(noncompetitive, S0, t)
 vnc = (vmax*Snc)/((MMconst + Snc)*(1 + Inc/Ki))
@@ -114,4 +103,4 @@ plt.show()
 
 # The inhibitor is non-competitive according to the graph
 #vmax estimated by non-linear regression is 1.59 M/min
-# Ki estimated by non-linear regression is 1.64 M
+#Ki estimated by non-linear regression is 1.64 M
