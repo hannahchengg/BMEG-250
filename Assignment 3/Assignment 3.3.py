@@ -91,35 +91,16 @@ print('Km estimated by non-linear regression is', Km, 'mM')
 print('Km1 estimated by non-linear regression is', Km1, 'mM')
 print('Km2 estimated by non-linear regression is', Km2, 'mM')
 
-#Ci = 0 is the condition for regular MM equation
-
-#using uncompetitive equation:
-Ci = 0
-Ki = 0 
-Km0 = Km #this is the km of the original MM equation
-vmax0 = vmax #this is the vmax of the original MM equation
-
-#original equation: v = (vmax*S)/(Km + S)
-#uncompetitive equation: vuc = (vmax*Suc)/(Km + Suc*(1 + Iuc/Ki))
-
-#compare Vmax: Vmax0 = Vmax/(1+Ci/Ki)
-#compare Km: Km0 = Km/(1+Ci/Ki)
-
+#since km increases, it must be competitive
+MMconst = Km
 Ci1 = 1.26
 Ci2 = 1.95
+Ki1 = Ci1/(Km1/MMconst-1)
+Ki2 = Ci2/(Km2/MMconst-1)
+print(Ki1)
+print(Ki2)
 
-#rearrange: 
-Ki1v = Ci1/((vmax1/vmax0) - 1)
-#rearrange: 
-Ki1k = Ci1/((Km1/Km0) - 1)
-
-print("Ki1v", Ki1v)
-print("Ki1k", Ki1k)
-
-#rearrange: 
-Ki2v = Ci2/((vmax2/vmax0) - 1)
-#rearrange: 
-Ki2k = Ci2/((Km2/Km0) - 1)
-
-print("Ki2v", Ki2v)
-print("Ki2k", Ki2k)
+#Ki values are 
+0
+0.5779666215929721
+0.6975009273866488
