@@ -19,7 +19,6 @@ rsquared = r**2
 print("k is", k, "and r^2 is", r)
 
 #Question 2b
-
 time = enzyme_data['Time (min)']
 enz_ca = enzyme_data['CA (mol/m3)']
 
@@ -31,7 +30,6 @@ def derivative(S,t):
     return D
 
 v = -derivative(enz_ca,time)
-
 
 #estimate the velocity using michaelis
 def michaelis(substrate,params):
@@ -45,7 +43,7 @@ def residual(params):
     return michaelis(enz_ca,params) - v
 
 #find the best fit from residual
-fit_nl = least_squares(residual, [1,5]) #Fitting, [1,5] is the initial guess for params
+fit_nl = least_squares(residual, [1,1000000]) #Fitting, [1,5] is the initial guess for params
 velfit_nl = michaelis(enz_ca, fit_nl.x) #Data for trendline, parameters stored in the x-array of fit2
 
 vmax = fit_nl.x[0]
@@ -58,4 +56,43 @@ plt.plot(enz_ca, velfit_nl, "g", label = 'v from fit')
 plt.xlabel("$C_S$ (M)")
 plt.ylabel('Reaction velocity (M/min)')
 plt.legend()
+plt.show()
+
+
+#Question 2d
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Layer thicknesses in cm
+blood_thickness = 0.22  # Approximated from 220 μL in a cylindrical well with a diameter of 0.75 cm
+buffer_thickness = 0.22  # Same volume as blood
+hydrogel_thickness = 0.1
+total_thickness = blood_thickness + buffer_thickness + hydrogel_thickness
+
+# Concentration of citrulline in mol/m^3 (or equivalently mmol/L here)
+blood_concentration = 10  # Given for the blood layer
+# Assuming a linear decrease, just for visualization
+buffer_concentration_start = blood_concentration  # Assuming perfect mixing didn't occur
+buffer_concentration_end = 5  # Arbitrary value for demonstration
+hydrogel_concentration = 2  # Assuming significant conversion by enzyme
+
+# Depth (y-axis) from top to bottom of the well in cm
+depths = [0, blood_thickness, blood_thickness + buffer_thickness, total_thickness]
+
+# Corresponding concentrations at each depth boundary
+concentrations = [blood_concentration, buffer_concentration_start, buffer_concentration_end, hydrogel_concentration]
+
+# Creating the plot
+plt.figure(figsize=(8, 6))
+plt.step(concentrations, depths, where='pre', label='Citrulline Concentration Profile')
+
+# Customizing the plot
+plt.gca().invert_yaxis()  # Invert y-axis to match the physical layout (blood at the top)
+plt.title('Expected Citrulline Concentration Profile in the Well')
+plt.xlabel('Citrulline Concentration (mmol/L)')
+plt.ylabel('Depth in the Well (cm)')
+plt.legend()
+plt.grid(True)
+
+# Display the plot
 plt.show()
