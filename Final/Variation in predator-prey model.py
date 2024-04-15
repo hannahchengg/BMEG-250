@@ -1,39 +1,38 @@
 #Importing the requisite libraries
 import numpy as np
-from scipy.integrate import odeint #Using the simple ODE solver
+from scipy.integrate import odeint #Using the Runge-Kutta ODE solvers
 import matplotlib.pyplot as plt
 
-#Parameter values TO CHANGE
-a = 2
-b = 2
+#Parameter values
+#TO CHANGE
+a = 1 
+b = 1 
 c = 1
 d = 1
+e = 5
 
 #Defining the system of ODEs
 
-def system(z,t):
-    #z is an array of [x,y] 
-    #Indexing in python stats at 0
+def predprey(z,t):
+    #z is an array of [x,y]
+    #Iindexing in python stats at 0
     # x = z[0], y = z[1]
-    dxdt = a*z[0] - b*z[0]*z[1] #TO CHANGE BASED ON EQN
-    dydt = c*z[0]*z[1] - d*z[1] #TO CHANGE BASED ON EQN
+    dxdt = a*z[0] - b*z[0]*z[1] - (a/e)*(z[0]**2) #TO CHANGE
+    dydt = c*z[0]*z[1] - d*z[1] #TO CHANGE
     dzdt = [dxdt, dydt]
     return dzdt
 
+
 #Solving the system of ODEs
 
-t = np.linspace(0, 20, 200)
-z0 = [2,1] #INITIAL VALUES TO CHANGE
-z = odeint(system, z0, t)
+t = np.linspace(0, 40, 400)
+z0 = [2,1]
+z = odeint(predprey, z0, t)
 
 #Extracting the values for x and y from the solution array 
  
-x = z[:,0] #[rows, columns]
+x = z[:,0]
 y = z[:,1]
-
-# calculate x and y values at certain time points
-print("x:", z[-1, 0]) #REPLACE INDEX 0 WITH THE DESIRED TIME
-print("y:", z[-1, 1]) #REPLACE INDEX 0 WITH THE DESIRED TIME
 
 #Calculate partial derivatives for Jacobian matrix and eigenvalues
 def eigencalc(e):
@@ -62,20 +61,20 @@ e2 = [1, 1] #TO CHANGE ACCORDING TO CALCULATED EQ POINTS
 #if real part eigenvalues are 0 --> continuous oscillation; circle
 #if real part eignevalues mixed signs --> saddle point
 
-print("e1:", eigencalc(e1))
-print("e2:", eigencalc(e2))
+# print("e1:", eigencalc(e1))
+# print("e2:", eigencalc(e2))
 
 #Plotting the solution
+
 plt.subplot(2, 1, 1)
-plt.plot(t, x, "k", label = 'x(t)')
-plt.plot(t, y, "b", label = 'y(t)')
+plt.plot(t, x, "k", label = 'Prey')
+plt.plot(t, y, "b", label = 'Predator')
 plt.xlabel("Time")
 plt.ylabel("Number of individuals")
 plt.legend()
-#plt.show()
 
 plt.subplot(2, 1, 2)
-plt.plot(x, y, "r") #This is the implicit solution that we find analytically
-plt.xlabel("x(t)")
-plt.ylabel("y(t)")
+plt.plot(x, y, "r")
+plt.xlabel("Prey")
+plt.ylabel("Predators")
 plt.show()

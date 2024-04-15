@@ -81,8 +81,8 @@ plt.show()
 #Let's find the x & y pairs that satisfy the equilibrium condition
 
 #Finding where dx/dt and dy/dt are approximately 0 
-wx = np.where(abs(d_x) < 1e-6)[0]
-wy = np.where(abs(d_y) < 1e-6)[0]
+wx = np.where(abs(d_x) < 1e-10)[0]
+wy = np.where(abs(d_y) < 1e-10)[0]
 
 #Finding the values of x and y that make dx/dt and dy/dt equal to 0
 x_dx = np.zeros(len(wx))

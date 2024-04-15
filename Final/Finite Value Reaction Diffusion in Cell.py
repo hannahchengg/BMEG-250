@@ -4,14 +4,15 @@
 #Importing the requisite libraries
 import numpy as np
 from scipy.integrate import odeint
-from scipy.optimize import fmin
+from scipy.optimize import fminbound
 import matplotlib.pyplot as plt
 
 #Parameter values (these have been arbitrarily selected)
+#TO CHANGE
 
-DA = 6e-3 #mm2/hr
-vmax = 6 #uM/hr
-KM = 45 #uM
+# DA = 6e-3 #mm2/hr
+# vmax = 6 #uM/hr
+# KM = 45 #uM
 L = 0.5 #mm
 CAo = 50 #uM
 
@@ -20,7 +21,7 @@ CAo = 50 #uM
 
 def bvp(S, x):
     dCdx = S[1]
-    dQdx = 0
+    dQdx = 0.02
     dSdx = [dCdx, dQdx]
     return dSdx
 
@@ -34,29 +35,25 @@ x = np.linspace(0,L,1000)
 #We will then gauge the accuracy of the solution by comparing the value of Q at x = L
 
 def shooting(Q_guess):
-    S0 = [CAo,Q_guess]
+    S0 = [CAo, Q_guess]
     S = odeint(bvp, S0, x)
-    C_numerical = S[:,0]
     Q_numerical = S[:,1]
-    size = np.size(C_numerical)-1
-    CA = C_numerical[size]
-    rxn = (CA*vmax)/(DA*(KM + CA))
-    sol = abs(Q_numerical[size] + rxn) #dC/dx is negative, rxn will need to be positive in this expression
+    size = np.size(Q_numerical)-1 
+    sol = abs(Q_numerical[size]) #dCA/dx @ x = L is 0
     return sol
 
 #Running the optimization
-Q_ini_correct = fmin(shooting, -10, xtol=1e-8) #some random guess
+Q_ini_correct = fminbound(shooting, -10000, 10000, xtol=1e-8) #some random guess
 
 #Resolving the ODE with the correct initial value of Q
 S_ini = [CAo,Q_ini_correct]
- 
 S_correct = odeint(bvp, S_ini, x)
 C_correct = S_correct[:,0]
-#Q_correct = S_correct[:,1] 
 
 #Plotting the result
-plt.plot(x, C_correct, "r")
+plt.plot(x, C_correct, "b")
 plt.xlabel("Length (mm)")
 plt.ylabel('$C_A$ (uM)')
-plt.title('Heterogeneous: $C_A$ (x = 0) = $C_{Ao}$ and ' r'$\frac{dC_A}{dx}$ ' '(x = L) = ' r'$\frac{{-v_{max}}{C_A}}{{D_A}({{K_M} + {C_A}})}$')
+plt.title('Homogeneous: $C_A$ (x = 0) = $C_{Ao}$ and ' r'$\frac{dC_A}{dx}$ ' '(x = L) = 0')
 plt.show()
+

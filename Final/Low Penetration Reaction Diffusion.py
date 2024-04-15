@@ -50,14 +50,14 @@ plt.show()
 #Now let's solve this problem using Python
 
 from scipy.integrate import odeint
-from scipy.optimize import fmin
+from scipy.optimize import fminbound
 
 #odeint only solves IVPs
 #This means we need to use the shooting method to solve the BVP
 #The shooting method is simply an optimization problem
 #We will solve the problem for a single value of phi to demonstrate the method
 
-P = 3 #value for phi that we will use to solve the BVP numerically
+P = 0.01 #value for phi that we will use to solve the BVP numerically
 x = np.linspace(0,L,25) #Re-defining x so that we have a clearer plot
 
 #The solution array is S = [C, Q] where dCdx = Q
@@ -76,20 +76,24 @@ def bvp(S, x):
 #We will then gauge the accuracy of the solution by comparing the value of CA at x = L
 
 def shooting(Q_guess):
-    S0 = Q_guess
+    S0 = [CAo, Q_guess]
+    print(S0)
     S = odeint(bvp, S0, x)
     C_numerical = S[:,0]
     k = np.size(x)-1
-    sol = abs(C_numerical[k])
+    sol = abs(C_numerical[k]) #last value of C_numerical
+    print(sol)
     return sol
 
 #Running the optimization
-guess = -30 #TO CHANGE?
+guess = -100 #TO CHANGE?
 guess_array = [CAo, guess]
-Q_ini_correct = fmin(shooting, guess_array, xtol=1e-8) #some random guess
+Q_ini_correct = fminbound(shooting, -10000, 10000, xtol=1e-8) #some random guess
+print(Q_ini_correct)
 
 #Resolving the ODE with the correct initial value of Q
-S_ini = [CAo, Q_ini_correct[1]]
+S_ini = [CAo, Q_ini_correct]
+print(S_ini)
 S_correct = odeint(bvp, S_ini, x)
 C_correct = S_correct[:,0]
 C_analytical = analytical(x,P)
