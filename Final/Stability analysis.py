@@ -2,6 +2,7 @@
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
+from sympy import symbols, diff
 
 #Parameter values
 
@@ -104,6 +105,16 @@ print('y:',y_dx)
 print('dy/dt is zero for:')
 print('x:',x_dy)
 print('y:',y_dy)
+
+e1 = [x_dx[0], y_dy[0]]
+e2 = [x_dy[0], y_dx[0]]
+e3 = [x_dx[-1], y_dy[-1]]
+e4 = [x_dy[-1], y_dx[-1]]
+
+print("EQ point 1: ", e1)
+print("EQ point 2: ", e2)
+print("EQ point 3: ", e3)
+print("EQ point 4: ", e4)
 
 #Making a series of plots that probe the influence of initial values
 #on the trajectory, also determining equilibrium points 
